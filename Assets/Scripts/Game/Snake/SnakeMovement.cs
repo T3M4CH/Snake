@@ -2,40 +2,36 @@ using Game.TimeService.Interfaces;
 using Game.Input.Interfaces;
 using UnityEngine;
 using Zenject;
-using System;
 
 namespace Game.Snake
 {
-    public class SnakeMovement : IDisposable
+    public class SnakeMovement
     {
-        public SnakeMovement(Transform transform, ISwipeHandler swipeHandler, ITimeService timeService)
+        public SnakeMovement(Transform transform, ISwipeHandler swipeHandler)
         {
             _transform = transform;
-            _swipeHandler = swipeHandler;
-            _timeService = timeService;
-            _timeService.OnTick += Move;
-            _swipeHandler.OnSwipeUp += () => _direction = Vector2Int.up;
-            _swipeHandler.OnSwipeLeft += () => _direction = Vector2Int.left;
-            _swipeHandler.OnSwipeRight += () => _direction = Vector2Int.right;
-            _swipeHandler.OnSwipeDown += () => _direction = Vector2Int.down;
+            swipeHandler.OnSwipeUp += () => ChangeDirection(Vector2Int.up);
+            swipeHandler.OnSwipeLeft += () => ChangeDirection(Vector2Int.left);
+            swipeHandler.OnSwipeRight += () => ChangeDirection(Vector2Int.right);
+            swipeHandler.OnSwipeDown += () => ChangeDirection(Vector2Int.down);
         }
 
         private Vector2Int _direction = Vector2Int.up;
-        private ISwipeHandler _swipeHandler;
-        private Transform _transform;
+        private readonly Transform _transform;
         private readonly ITimeService _timeService;
 
-        private void Move()
+        public void Move()
         {
             var position = _transform.position;
             _transform.position = new Vector3Int((int)position.x + _direction.x, (int)position.y + _direction.y);
         }
 
-        public void Dispose()
+        private void ChangeDirection(Vector2Int direction)
         {
-            _timeService.OnTick -= Move;
+            if (_direction == direction * -1) return;
+            _direction = direction;
         }
-
+        
         public class Factory : PlaceholderFactory<Transform, SnakeMovement>
         {
         }
