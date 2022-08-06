@@ -60,9 +60,7 @@ namespace Game.Installers
                 .BindFactory<Transform, SnakeMovement, TailMovement, TailMovement.Factory>();
 
             Container
-                .DeclareSignalWithInterfaces<PlayerDiedSignal>()
-                .OptionalSubscriber();
-
+                .DeclareSignalWithInterfaces<PlayerDiedSignal>();
         }
     }
 }
