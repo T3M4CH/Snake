@@ -22,7 +22,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Scene/SoundSystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Snake/MonoSnake.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Snake/SnakeMovement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/MonoSnake.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/NetworkSnake.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/TestShit.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -101,6 +102,11 @@
       <workItem from="1659709395174" duration="5866000" />
       <workItem from="1659717385562" duration="1466000" />
       <workItem from="1659762345820" duration="2534000" />
+      <workItem from="1659773760084" duration="2239000" />
+      <workItem from="1659794157121" duration="4342000" />
+      <workItem from="1659802149784" duration="1970000" />
+      <workItem from="1659848184881" duration="14334000" />
+      <workItem from="1659883052674" duration="2838000" />
     </task>
     <servers />
   </component>

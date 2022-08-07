@@ -7,17 +7,19 @@ using Zenject;
 
 namespace Multiplayer
 {
-    public class MonoSnake : NetworkBehaviour
+    public class NetworkSnake : NetworkBehaviour
     {
         private TailMovement _tailMovement;
+        private SnakeMovement.Factory _movementFactory;
+        private TailMovement.Factory _tailFactory;
         private SignalBus _signalBus;
 
         [Inject]
         private void Construct(SignalBus signalBus, SnakeMovement.Factory movementFactory,
             TailMovement.Factory tailFactory)
         {
-            var snakeMovement = movementFactory.Create(transform);
-            _tailMovement = tailFactory.Create(transform, snakeMovement);
+            _movementFactory = movementFactory;
+            _tailFactory = tailFactory;
             _signalBus = signalBus;
         }
 
@@ -26,7 +28,6 @@ namespace Multiplayer
             if (col.TryGetComponent(out IPickable pickable))
             {
                 pickable.Pick();
-                _tailMovement.Add();
             }
 
             if (col.CompareTag("Snake"))
@@ -34,6 +35,12 @@ namespace Multiplayer
                 _signalBus.AbstractFire<PlayerDiedSignal>();
                 //_tailMovement.Dispose();
             }
+        }
+
+        private void Start()
+        {
+            var snakeMovement = _movementFactory.Create(isLocalPlayer, transform);
+            _tailMovement = _tailFactory.Create(transform, isLocalPlayer, snakeMovement);
         }
 
         private void Update()

@@ -15,8 +15,8 @@ namespace Game.Snake
         private void Construct(SignalBus signalBus, SnakeMovement.Factory movementFactory,
             TailMovement.Factory tailFactory)
         {
-            var snakeMovement = movementFactory.Create(transform);
-            _tailMovement = tailFactory.Create(transform, snakeMovement);
+            var snakeMovement = movementFactory.Create(true,transform);
+            _tailMovement = tailFactory.Create(transform, true, snakeMovement);
             _signalBus = signalBus;
         }
 

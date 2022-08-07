@@ -13,9 +13,8 @@ namespace Game.Installers
 
         
         [SerializeField] private CircleCollider2D tailPrefab;
-        [SerializeField] private MonoApple applePrefab;
         [SerializeField] private SwipeHandler swipeHandler;
-        [SerializeField] private TimeService.TimeService timeService;
+        [SerializeField] private TickController.TimeService timeService;
 
         #endregion
         
@@ -36,15 +35,9 @@ namespace Game.Installers
                 .NonLazy();
 
             Container
-                .BindInterfacesTo<TimeService.TimeService>()
+                .BindInterfacesTo<TickController.TimeService>()
                 .FromInstance(timeService)
                 .AsSingle();
-
-            Container
-                .Bind<AppleSpawner>()
-                .AsSingle()
-                .WithArguments(applePrefab)
-                .NonLazy();
 
             Container
                 .BindMemoryPool<CircleCollider2D, MemoryPool<CircleCollider2D>>()
@@ -54,10 +47,10 @@ namespace Game.Installers
                 .AsSingle();
 
             Container
-                .BindFactory<Transform, SnakeMovement, SnakeMovement.Factory>();
+                .BindFactory<bool ,Transform, SnakeMovement, SnakeMovement.Factory>();
 
             Container
-                .BindFactory<Transform, SnakeMovement, TailMovement, TailMovement.Factory>();
+                .BindFactory<Transform, bool,SnakeMovement, TailMovement, TailMovement.Factory>();
 
             Container
                 .DeclareSignalWithInterfaces<PlayerDiedSignal>();

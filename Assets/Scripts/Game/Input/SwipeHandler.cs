@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Game.Input
 {
-    public class SwipeHandler : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
+    public class SwipeHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
     {
         [Range(0f, 1f)] public float swipeThreshold = 0.5f;
 
@@ -38,11 +38,6 @@ namespace Game.Input
 
             if (dir.y < -swipeThreshold)
                 OnSwipeDown.Invoke();
-        }
-
-        private void Start()
-        {
-            if (!isLocalPlayer) enabled = false;
         }
     }
 }

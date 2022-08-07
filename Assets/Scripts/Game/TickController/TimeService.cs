@@ -1,20 +1,30 @@
-using Game.TimeService.Interfaces;
-using UnityEngine;
 using System;
+using Game.TimeService.Interfaces;
+using Mirror;
+using UnityEngine;
 
-namespace Game.TimeService
+namespace Game.TickController
 {
-    public class TimeService : MonoBehaviour ,ITimeService
+    public class TimeService : NetworkBehaviour, ITimeService
     {
-        public event Action OnTick = () => {};
+        public event Action OnTick = () => { };
 
-        private float _tickValue = 1f;
+        [SerializeField] private float tickValue = 1f;
+        
+        private float _currentValue;
 
         private void Update()
         {
-            _tickValue -= Time.deltaTime;
-            if (_tickValue > 0) return;
-            _tickValue = 1;
+            if (!isServer) return;
+            _currentValue -= Time.deltaTime;
+            if (_currentValue > 0) return;
+            _currentValue = tickValue;
+            RpcTick();
+        }
+
+        [ClientRpc]
+        private void RpcTick()
+        {
             OnTick.Invoke();
         }
     }

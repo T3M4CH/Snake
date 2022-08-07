@@ -1,30 +1,33 @@
-using Game.Scene;
-using Game.Scene.Interfaces;
 using UnityEngine;
 using Zenject;
+using Mirror;
 
 namespace Game.Apple
 {
-    public class AppleSpawner
+    public class AppleSpawner : NetworkBehaviour
     {
-        public AppleSpawner(MonoApple apple, DiContainer container, SignalBus signalBus)
+        [SerializeField] private MonoApple applePrefab;
+        
+        public override void OnStartServer()
         {
-            signalBus.Subscribe<ISignalSoundPlayer>(x => Debug.Log("ya prav!"));
-            Spawn(apple, container);
-        }
-
-        private void Spawn(MonoApple applePrefab, DiContainer container)
-        {
-            var instance = container.InstantiatePrefab(applePrefab).GetComponent<MonoApple>();
+            var instance = Instantiate(applePrefab);
+            NetworkServer.Spawn(instance.gameObject);
             instance.transform.position = RandomPosition;
-            instance.Initialize(ChangePosition);
+            instance.Initialize(CmdChangePosition);
         }
 
-        private static void ChangePosition(MonoApple apple)
+        [Command(requiresAuthority = false)]
+        private void CmdChangePosition(MonoApple apple)
         {
-            apple.transform.position = RandomPosition;
+            RpcChangePosition(apple, RandomPosition);
         }
 
-        private static Vector2 RandomPosition => new(Random.Range(-8, 9), Random.Range(-4, 5));
+        [ClientRpc]
+        private void RpcChangePosition(MonoApple apple, Vector3 position)
+        {
+            apple.transform.position = position;
+        }
+        
+        private static Vector3 RandomPosition => new(Random.Range(-5, 5), Random.Range(-5, 5), 0);
     }
 }

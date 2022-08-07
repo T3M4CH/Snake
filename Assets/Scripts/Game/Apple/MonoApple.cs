@@ -1,10 +1,10 @@
 using System;
 using Game.Apple.Interfaces;
-using UnityEngine;
+using Mirror;
 
 namespace Game.Apple
 {
-    public class MonoApple : MonoBehaviour, IPickable
+    public class MonoApple : NetworkBehaviour, IPickable
     {
         private event Action<MonoApple> OnPick = _ => { };
         
