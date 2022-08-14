@@ -1,3 +1,4 @@
+using System;
 using Game.TimeService.Interfaces;
 using Game.Input.Interfaces;
 using Mirror;
@@ -6,53 +7,38 @@ using Zenject;
 
 namespace Game.Snake
 {
-    public class SnakeMovement
+    public class SnakeMovement : NetworkBehaviour
     {
-        public SnakeMovement(bool isLocalPlayer, Transform transform, ISwipeHandler swipeHandler)
+        [Inject]
+        public void Construct(ISwipeHandler swipeHandler)
         {
-            _transform = transform;
-            if (!isLocalPlayer) return;
-            _direction = Vector2Int.up;
-            swipeHandler.OnSwipeUp += () => CmdChangeDirection(Vector2Int.up);
-            swipeHandler.OnSwipeLeft += () => CmdChangeDirection(Vector2Int.left);
-            swipeHandler.OnSwipeRight += () => CmdChangeDirection(Vector2Int.right);
-            swipeHandler.OnSwipeDown += () => CmdChangeDirection(Vector2Int.down);
+            _swipeHandler = swipeHandler;
         }
 
-        [SyncVar]
-        private Vector2Int _direction;
+        [SyncVar] private Vector2Int _direction;
 
-        private readonly Transform _transform;
-        private readonly ITimeService _timeService;
+        private ISwipeHandler _swipeHandler;
 
-        [Command]
-        public void CmdMove()
+        public Vector3Int GetMovePoint(Vector2Int position)
         {
-            var position = _transform.position;
             if (position.x is > 5 or < -5) position.x *= -1;
             if (position.y is > 5 or < -5) position.y *= -1;
-            _transform.position = new Vector3Int((int)position.x + _direction.x, (int)position.y + _direction.y);
+            return new Vector3Int(position.x + _direction.x, position.y + _direction.y);
         }
 
         [Command]
         private void CmdChangeDirection(Vector2Int direction)
         {
+            Debug.Log("Change");
             if (_direction == direction * -1) return;
             _direction = direction;
         }
 
-        private void ChangeDirection(Vector2Int direction)
+        private void Start()
         {
-            if (_direction == direction * -1) return;
-            _direction = direction;
-        }
-
-        private void SyncDirection(Vector2Int oldValue, Vector2Int newValue)
-        {
-        }
-
-        public class Factory : PlaceholderFactory<bool, Transform, SnakeMovement>
-        {
+            if (!isLocalPlayer) return;
+            _swipeHandler.OnSwipe += CmdChangeDirection;
+            _direction = Vector2Int.up;
         }
     }
 }

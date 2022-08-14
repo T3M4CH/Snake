@@ -1,46 +1,37 @@
+using System;
 using Game.Apple.Interfaces;
 using Game.Scene;
+using UnityEngine;
 using Game.Snake;
 using Mirror;
-using UnityEngine;
 using Zenject;
 
 namespace Multiplayer
 {
     public class NetworkSnake : NetworkBehaviour
     {
-        private TailMovement _tailMovement;
-        private SnakeMovement.Factory _movementFactory;
-        private TailMovement.Factory _tailFactory;
+        [SerializeField] private TailMovement tailMovement;
         private SignalBus _signalBus;
 
         [Inject]
-        private void Construct(SignalBus signalBus, SnakeMovement.Factory movementFactory,
-            TailMovement.Factory tailFactory)
+        private void Construct(SignalBus signalBus)
         {
-            _movementFactory = movementFactory;
-            _tailFactory = tailFactory;
             _signalBus = signalBus;
         }
-
+        
+        [ServerCallback]
         private void OnTriggerEnter2D(Collider2D col)
         {
             if (col.TryGetComponent(out IPickable pickable))
             {
                 pickable.Pick();
+                tailMovement.CmdAdd(gameObject);
             }
 
             if (col.CompareTag("Snake"))
             {
-                _signalBus.AbstractFire<PlayerDiedSignal>();
-                //_tailMovement.Dispose();
+                Debug.Log("Collision");
             }
-        }
-
-        private void Start()
-        {
-            var snakeMovement = _movementFactory.Create(isLocalPlayer, transform);
-            _tailMovement = _tailFactory.Create(transform, isLocalPlayer, snakeMovement);
         }
 
         private void Update()

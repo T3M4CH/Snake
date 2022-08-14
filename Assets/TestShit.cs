@@ -21,7 +21,7 @@ public class TestShit : NetworkBehaviour
     }
 
     [Server]
-    private void ChangeColor() => ChangeText(new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f)));
+    private void ChangeColor() => ChangeText(Random.ColorHSV());
 
     [ClientRpc]
     private void ChangeText(Color color) => text.color = color;

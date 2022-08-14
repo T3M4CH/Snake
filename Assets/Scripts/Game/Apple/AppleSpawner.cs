@@ -1,5 +1,4 @@
 using UnityEngine;
-using Zenject;
 using Mirror;
 
 namespace Game.Apple
@@ -13,13 +12,15 @@ namespace Game.Apple
             var instance = Instantiate(applePrefab);
             NetworkServer.Spawn(instance.gameObject);
             instance.transform.position = RandomPosition;
-            instance.Initialize(CmdChangePosition);
+            instance.Initialize(ChangePosition);
         }
 
-        [Command(requiresAuthority = false)]
-        private void CmdChangePosition(MonoApple apple)
+        [Server]
+        private void ChangePosition(MonoApple apple)
         {
-            RpcChangePosition(apple, RandomPosition);
+            var position = RandomPosition;
+            apple.transform.position = position;
+            RpcChangePosition(apple, position);
         }
 
         [ClientRpc]

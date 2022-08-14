@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Game.Input.Interfaces;
 using Game.TimeService.Interfaces;
 using Mirror;
 using UnityEngine;
@@ -6,54 +8,100 @@ using Zenject;
 
 namespace Game.Snake
 {
-    public class TailMovement
+    public class TailMovement : NetworkBehaviour
     {
-        public TailMovement(Transform player, bool isLocalPlayer, SnakeMovement snakeMovement, MemoryPool<CircleCollider2D> tailSegment,
-            ITimeService timeService)
+        [Inject]
+        public void Construct
+        (
+            GameObject tailSegment,
+            ITimeService timeService,
+            ISwipeHandler swipeHandler
+        )
         {
-            _isLocalPlayer = isLocalPlayer;
-            _snakeMovement = snakeMovement;
-            _segmentPool = tailSegment;
-            _tail.Add(player.GetChild(0));
+            _swipeHandler = swipeHandler;
+            _segmentPrefab = tailSegment;
             _timeService = timeService;
-            _timeService.OnTick += CmdMove;
         }
 
         private ITimeService _timeService;
-        private readonly bool _isLocalPlayer;
-        private readonly MemoryPool<CircleCollider2D> _segmentPool;
-        private readonly SnakeMovement _snakeMovement;
+        private Action _onChangeActive;
+        [SyncVar] private Vector2Int _direction;
+        private ISwipeHandler _swipeHandler;
+        private GameObject _segmentPrefab;
+        private NetworkConnection _client;
         private List<Transform> _tail = new();
 
-        public void Add()
+        [Server]
+        public void CmdAdd(GameObject sender)
         {
-            var segment = _segmentPool.Spawn();
-            segment.transform.position = _tail[^1].position;
-            _tail.Add(segment.transform);
+            if (sender != gameObject) return;
+            var segment = Instantiate(_segmentPrefab);
+            NetworkServer.Spawn(segment, connectionToClient);
+            segment.SetActive(false);
+            
+            RpcAdd(segment);
         }
         
         [Command]
-        private void CmdMove()
+        private void CmdSetActive(GameObject segment)
         {
+            segment.SetActive(true);
+            RpcSetActive(segment);
+        }
+
+        [ClientRpc]
+        private void RpcSetActive(GameObject segment)
+        {
+            segment.SetActive(true);
+            _timeService.OnTick -= _onChangeActive;
+        }
+
+        [ClientRpc]
+        private void RpcAdd(GameObject segment)
+        {
+            segment.transform.position = _tail[^1].position;
+            _tail.Add(segment.transform);
+            segment.SetActive(false);
             
+            _onChangeActive = () => CmdSetActive(segment);
+            _timeService.OnTick += _onChangeActive;
+        }
+
+        private void Move()
+        {
             for (var i = _tail.Count - 1; i > 0; i--)
             {
                 _tail[i].position = _tail[i - 1].position;
-                if (i == _tail.Count - 1)
-                {
-                    _tail[i].gameObject.SetActive(true);
-                }
             }
-            _snakeMovement.CmdMove();
+
+            var position = transform.position;
+            ValidatePosition(ref position);
+            position = new Vector3Int((int)position.x + _direction.x, (int)position.y + _direction.y);
+            transform.position = position;
         }
 
-        public void Dispose()
+        [Command]
+        private void CmdChangeDirection(Vector2Int direction)
         {
-            _timeService.OnTick -= CmdMove;
+            if (_direction == direction * -1) return;
+            _direction = direction;
         }
-    
-        public class Factory : PlaceholderFactory<Transform, bool, SnakeMovement, TailMovement>
+
+        private void Start()
         {
+            if (isLocalPlayer)
+            {
+                _swipeHandler.OnSwipe += CmdChangeDirection;
+                _timeService.OnTick += Move;
+            }
+            
+            _tail.Add(transform);
+        }
+
+        private void ValidatePosition(ref Vector3 position)
+        {
+            if (position.x is > 5 or < -5) position.x *= -1;
+            if (position.y is > 5 or < -5) position.y *= -1;
         }
     }
 }

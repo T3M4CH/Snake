@@ -6,14 +6,11 @@ using UnityEngine.EventSystems;
 
 namespace Game.Input
 {
-    public class SwipeHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
+    public class SwipeHandler : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
     {
         [Range(0f, 1f)] public float swipeThreshold = 0.5f;
 
-        public event Action OnSwipeUp = () => { };
-        public event Action OnSwipeDown = () => { };
-        public event Action OnSwipeRight = () => { };
-        public event Action OnSwipeLeft = () => { };
+        public event Action<Vector2Int> OnSwipe = _ => { };
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -25,19 +22,19 @@ namespace Game.Input
 
         public void OnEndDrag(PointerEventData data)
         {
-            Vector2 dir = (data.position - data.pressPosition).normalized;
+            var dir = (data.position - data.pressPosition).normalized;
 
             if (dir.x > swipeThreshold)
-                OnSwipeRight.Invoke();
+                OnSwipe.Invoke(Vector2Int.right);
 
             if (dir.x < -swipeThreshold)
-                OnSwipeLeft.Invoke();
+                OnSwipe.Invoke(Vector2Int.left);
 
             if (dir.y > swipeThreshold)
-                OnSwipeUp.Invoke();
+                OnSwipe.Invoke(Vector2Int.up);
 
             if (dir.y < -swipeThreshold)
-                OnSwipeDown.Invoke();
+                OnSwipe.Invoke(Vector2Int.down);
         }
     }
 }

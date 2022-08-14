@@ -314,6 +314,7 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 3823016421334716483, guid: f747a9038b2b2c4498ea2a29657cbac3, type: 3}
+  - {fileID: 8740417607154218586, guid: 5ddfb4de7cfb35a4ba072dcb31fa5aec, type: 3}
 --- !u!4 &470117797
 Transform:
   m_ObjectHideFlags: 0
@@ -725,7 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c751270c8049c4badef6329659ad28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tailPrefab: {fileID: 8333686696908066632, guid: 5ddfb4de7cfb35a4ba072dcb31fa5aec, type: 3}
+  tailPrefab: {fileID: 8740417607154218586, guid: 5ddfb4de7cfb35a4ba072dcb31fa5aec, type: 3}
   swipeHandler: {fileID: 1145914030}
   timeService: {fileID: 844997278}
 --- !u!114 &1102270761
@@ -787,6 +788,7 @@ GameObject:
   - component: {fileID: 1145914032}
   - component: {fileID: 1145914031}
   - component: {fileID: 1145914030}
+  - component: {fileID: 1145914033}
   m_Layer: 5
   m_Name: SwipeHandler
   m_TagString: Untagged
@@ -826,6 +828,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1060af050f6e77e40b6b65214a18a878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   swipeThreshold: 0.5
 --- !u!114 &1145914031
 MonoBehaviour:
@@ -865,6 +869,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145914028}
   m_CullTransparentMesh: 1
+--- !u!114 &1145914033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145914028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 4188797817
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1951927357
 GameObject:
   m_ObjectHideFlags: 0
