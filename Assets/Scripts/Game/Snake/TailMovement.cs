@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Input.Interfaces;
-using Game.TimeService.Interfaces;
+using Game.TickController.Interfaces;
 using Mirror;
 using UnityEngine;
 using Zenject;
@@ -29,46 +29,70 @@ namespace Game.Snake
         private ISwipeHandler _swipeHandler;
         private GameObject _segmentPrefab;
         private NetworkConnection _client;
-        private List<Transform> _tail = new();
+        private readonly List<Transform> _tail = new();
+
+        public void RemoveTail()
+        {
+            CmdDestroyTail(_tail);
+            _tail.RemoveRange(1, _tail.Count - 1);
+        }
 
         [Server]
-        public void CmdAdd(GameObject sender)
+        public void Add(GameObject sender)
         {
             if (sender != gameObject) return;
-            var segment = Instantiate(_segmentPrefab);
+
+            var segment = Instantiate(_segmentPrefab, Vector2.one * 10, Quaternion.identity);
             NetworkServer.Spawn(segment, connectionToClient);
             segment.SetActive(false);
-            
-            RpcAdd(segment);
+            RpcSetActive(segment, false);
+
+            RpcAdd(connectionToClient, segment);
         }
-        
+
+        [Server]
+        public void StopMovement()
+        {
+            RpcStopMovement();
+        }
+
+        [ClientRpc]
+        private void RpcStopMovement()
+        {
+            _direction = Vector2Int.zero;
+            _timeService.OnTick -= Move;
+        }
+
         [Command]
-        private void CmdSetActive(GameObject segment)
+        private void CmdSetActive(GameObject segment, bool value)
         {
-            segment.SetActive(true);
-            RpcSetActive(segment);
+            segment.SetActive(value);
+            RpcSetActive(segment, value);
         }
 
         [ClientRpc]
-        private void RpcSetActive(GameObject segment)
+        private void RpcSetActive(GameObject segment, bool value)
         {
-            segment.SetActive(true);
-            _timeService.OnTick -= _onChangeActive;
+            segment.SetActive(value);
+            if (value)
+            {
+                _timeService.OnTick -= _onChangeActive;
+            }
         }
 
-        [ClientRpc]
-        private void RpcAdd(GameObject segment)
+        [TargetRpc]
+        private void RpcAdd(NetworkConnection target, GameObject segment)
         {
             segment.transform.position = _tail[^1].position;
             _tail.Add(segment.transform);
-            segment.SetActive(false);
-            
-            _onChangeActive = () => CmdSetActive(segment);
+
+            _onChangeActive = () => CmdSetActive(segment, true);
             _timeService.OnTick += _onChangeActive;
         }
 
         private void Move()
         {
+            Debug.Log("mive");
             for (var i = _tail.Count - 1; i > 0; i--)
             {
                 _tail[i].position = _tail[i - 1].position;
@@ -87,21 +111,43 @@ namespace Game.Snake
             _direction = direction;
         }
 
+        [Command]
+        private void CmdDestroyTail(List<Transform> tailTransforms)
+        {
+            for (int i = 1; i < tailTransforms.Count; i++)
+            {
+                NetworkServer.Destroy(tailTransforms[i].gameObject);
+            }
+        }
+
+        private void ChangeMoveAccess(bool value)
+        {
+            if (value)
+            {
+                _timeService.OnTick += Move;
+            }
+            else
+            {
+                _timeService.OnTick -= Move;
+            }
+        }
+
         private void Start()
         {
             if (isLocalPlayer)
             {
+                ChangeMoveAccess(_timeService.IsActive);
+                _timeService.OnChangeState += ChangeMoveAccess;
                 _swipeHandler.OnSwipe += CmdChangeDirection;
-                _timeService.OnTick += Move;
             }
-            
+
             _tail.Add(transform);
         }
 
         private void ValidatePosition(ref Vector3 position)
         {
-            if (position.x is > 5 or < -5) position.x *= -1;
-            if (position.y is > 5 or < -5) position.y *= -1;
+            if (position.x is >= 8 or <= -8) position.x *= -1;
+            if (position.y is >= 4 or <= -4) position.y *= -1;
         }
     }
 }

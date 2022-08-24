@@ -8,11 +8,11 @@ namespace Mirror.Examples.MultipleMatch
     [RequireComponent(typeof(NetworkMatch))]
     public class MatchController : NetworkBehaviour
     {
-        internal readonly SyncDictionary<NetworkIdentity, MatchPlayerData> matchPlayerData = new SyncDictionary<NetworkIdentity, MatchPlayerData>();
-        internal readonly Dictionary<CellValue, CellGUI> MatchCells = new Dictionary<CellValue, CellGUI>();
+        internal readonly SyncDictionary<NetworkIdentity, MatchPlayerData> matchPlayerData = new();
+        internal readonly Dictionary<CellValue, CellGUI> MatchCells = new();
 
         CellValue boardScore = CellValue.None;
-        bool playAgain = false;
+        private bool playAgain;
 
         [Header("GUI References")]
         public CanvasGroup canvasGroup;

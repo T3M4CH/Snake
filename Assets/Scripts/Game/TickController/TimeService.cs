@@ -1,5 +1,5 @@
 using System;
-using Game.TimeService.Interfaces;
+using Game.TickController.Interfaces;
 using Mirror;
 using UnityEngine;
 
@@ -8,10 +8,31 @@ namespace Game.TickController
     public class TimeService : NetworkBehaviour, ITimeService
     {
         public event Action OnTick = () => { };
+        public event Action OnRealtimeTick = () => { };
+        public event Action<bool> OnChangeState = _ => { };
 
         [SerializeField] private float tickValue = 1f;
-        
+
+        [SyncVar] private bool _isActive;
         private float _currentValue;
+
+        [Server]
+        public void ChangeState(bool isStart)
+        {
+            _isActive = isStart;
+            OnChangeState.Invoke(isStart);
+
+            RpcChangeState(isStart);
+        }
+
+        [ClientRpc]
+        private void RpcChangeState(bool value)
+        {
+            if (isClientOnly)
+            {
+                OnChangeState.Invoke(value);
+            }
+        }
 
         private void Update()
         {
@@ -19,13 +40,28 @@ namespace Game.TickController
             _currentValue -= Time.deltaTime;
             if (_currentValue > 0) return;
             _currentValue = tickValue;
+            Tick();
+        }
+
+        [Server]
+        private void Tick()
+        {
+            OnRealtimeTick.Invoke();
+            if (!_isActive) return;
+            OnTick.Invoke();
             RpcTick();
         }
 
         [ClientRpc]
         private void RpcTick()
         {
-            OnTick.Invoke();
+            if (isClientOnly)
+            {
+                OnRealtimeTick.Invoke();
+                OnTick.Invoke();
+            }
         }
+
+        public bool IsActive => _isActive;
     }
 }

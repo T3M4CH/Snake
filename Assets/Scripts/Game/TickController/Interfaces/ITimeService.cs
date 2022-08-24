@@ -1,9 +1,18 @@
 using System;
 
-namespace Game.TimeService.Interfaces
+namespace Game.TickController.Interfaces
 {
    public interface ITimeService
    {
-      public event Action OnTick;
+      event Action OnTick;
+      event Action OnRealtimeTick;
+      event Action<bool> OnChangeState;
+
+      void ChangeState(bool isStart);
+
+      public bool IsActive
+      {
+         get;
+      }
    }
 }

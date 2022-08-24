@@ -293,7 +293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1758.75, y: -136.83}
+  m_AnchoredPosition: {x: 1758.75, y: -136.83002}
   m_SizeDelta: {x: 322.5, y: 273.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &754340316
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 770424214}
   - component: {fileID: 770424213}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Settings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -852,7 +852,7 @@ GameObject:
   - component: {fileID: 1525931581}
   - component: {fileID: 1525931580}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: MultiPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -973,6 +973,7 @@ GameObject:
   - component: {fileID: 1756385532}
   - component: {fileID: 1756385531}
   - component: {fileID: 1756385530}
+  - component: {fileID: 1756385533}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1067,6 +1068,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1756385528}
   m_CullTransparentMesh: 1
+--- !u!114 &1756385533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756385528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d0a921768a41e847863ed090b90f56e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singlePlayer: {fileID: 1893298233}
+  multiPlayer: {fileID: 1525931580}
+  settings: {fileID: 770424213}
 --- !u!1 &1884096395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,7 +1233,7 @@ GameObject:
   - component: {fileID: 1893298234}
   - component: {fileID: 1893298233}
   m_Layer: 5
-  m_Name: Button
+  m_Name: SinglePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

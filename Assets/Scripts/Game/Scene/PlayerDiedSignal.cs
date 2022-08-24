@@ -1,5 +1,4 @@
 using Game.Scene.Interfaces;
-using Game.TimeService.Interfaces;
 using UnityEngine;
 
 namespace Game.Scene

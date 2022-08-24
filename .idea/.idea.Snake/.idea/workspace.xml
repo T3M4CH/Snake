@@ -11,6 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Mirror/Examples/Pong/Scripts/Player.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Apple/Interfaces/IPickable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Apple/MonoApple.cs" root0="FORCE_HIGHLIGHTING" />
@@ -22,8 +23,13 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Scene/SoundSystem.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Snake/MonoSnake.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Game/Snake/SnakeMovement.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/NetworkSnake.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/TestShit.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/IRefereeService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Snake/Interfaces/INetManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Snake/Interfaces/ISpawnSettings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/Snake/NetManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/UI/Enums/EStates.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/UI/Interfaces/ILosePanel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Multiplayer/UI/SetupSelector.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -123,6 +129,24 @@
       <workItem from="1660474311945" duration="6953000" />
       <workItem from="1660496005982" duration="1738000" />
       <workItem from="1660497844375" duration="129000" />
+      <workItem from="1660535399680" duration="19769000" />
+      <workItem from="1660580802266" duration="1777000" />
+      <workItem from="1660628601697" duration="6212000" />
+      <workItem from="1660646811081" duration="17107000" />
+      <workItem from="1660717455018" duration="15690000" />
+      <workItem from="1660754363217" duration="1953000" />
+      <workItem from="1660794706820" duration="3575000" />
+      <workItem from="1660804575906" duration="6582000" />
+      <workItem from="1660819367286" duration="11094000" />
+      <workItem from="1660880613694" duration="11905000" />
+      <workItem from="1660912938475" duration="6406000" />
+      <workItem from="1660973377753" duration="2170000" />
+      <workItem from="1660983938734" duration="2733000" />
+      <workItem from="1661008462107" duration="1579000" />
+      <workItem from="1661063051342" duration="1660000" />
+      <workItem from="1661101305799" duration="4758000" />
+      <workItem from="1661144340502" duration="5714000" />
+      <workItem from="1661158007129" duration="7001000" />
     </task>
     <servers />
   </component>

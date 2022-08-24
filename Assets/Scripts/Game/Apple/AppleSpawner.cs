@@ -29,6 +29,6 @@ namespace Game.Apple
             apple.transform.position = position;
         }
         
-        private static Vector3 RandomPosition => new(Random.Range(-5, 5), Random.Range(-5, 5), 0);
+        private static Vector3 RandomPosition => new(Random.Range(-8, 8), Random.Range(-4, 4), 0);
     }
 }
