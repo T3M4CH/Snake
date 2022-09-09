@@ -44,27 +44,21 @@ namespace Game.Snake
 
             var segment = Instantiate(_segmentPrefab, Vector2.one * 10, Quaternion.identity);
             NetworkServer.Spawn(segment, connectionToClient);
+            segment.transform.position = _tail[^1].position;
+            _tail.Add(segment.transform);
             segment.SetActive(false);
-            RpcSetActive(segment, false);
-
-            RpcAdd(connectionToClient, segment);
+            
+            _onChangeActive = () => SetActive(segment, true);
+            _timeService.OnTick += _onChangeActive;
         }
-
-        [Server]
-        public void StopMovement()
-        {
-            RpcStopMovement();
-        }
-
+        
         [ClientRpc]
-        private void RpcStopMovement()
+        public void RpcStopMovement()
         {
             _direction = Vector2Int.zero;
-            _timeService.OnTick -= Move;
         }
 
-        [Command]
-        private void CmdSetActive(GameObject segment, bool value)
+        private void SetActive(GameObject segment, bool value)
         {
             segment.SetActive(value);
             RpcSetActive(segment, value);
@@ -80,19 +74,9 @@ namespace Game.Snake
             }
         }
 
-        [TargetRpc]
-        private void RpcAdd(NetworkConnection target, GameObject segment)
-        {
-            segment.transform.position = _tail[^1].position;
-            _tail.Add(segment.transform);
-
-            _onChangeActive = () => CmdSetActive(segment, true);
-            _timeService.OnTick += _onChangeActive;
-        }
-
+        [Server]
         private void Move()
         {
-            Debug.Log("mive");
             for (var i = _tail.Count - 1; i > 0; i--)
             {
                 _tail[i].position = _tail[i - 1].position;
@@ -136,9 +120,13 @@ namespace Game.Snake
         {
             if (isLocalPlayer)
             {
+                _swipeHandler.OnSwipe += CmdChangeDirection;
+            }
+
+            if (isServer)
+            {
                 ChangeMoveAccess(_timeService.IsActive);
                 _timeService.OnChangeState += ChangeMoveAccess;
-                _swipeHandler.OnSwipe += CmdChangeDirection;
             }
 
             _tail.Add(transform);
@@ -146,8 +134,8 @@ namespace Game.Snake
 
         private void ValidatePosition(ref Vector3 position)
         {
-            if (position.x is >= 8 or <= -8) position.x *= -1;
-            if (position.y is >= 4 or <= -4) position.y *= -1;
+            if (position.x is > 8 or < -8) position.x *= -1;
+            if (position.y is > 4 or < -4) position.y *= -1;
         }
     }
 }

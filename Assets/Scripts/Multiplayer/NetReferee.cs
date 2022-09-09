@@ -1,15 +1,14 @@
-using System.Collections.Generic;
 using Game.TickController.Interfaces;
-using Mirror;
 using Multiplayer.Snake.Interfaces;
-using Multiplayer.UI.Enums;
 using Multiplayer.UI.Interfaces;
-using UnityEngine;
+using System.Collections.Generic;
+using Multiplayer.UI.Enums;
 using Zenject;
+using Mirror;
 
 namespace Multiplayer
 {
-    public class Referee : NetworkBehaviour, IRefereeService
+    public class NetReferee : NetworkBehaviour, IRefereeService
     {
         private int _loserCount;
         private ITimeService _timeService;
@@ -29,23 +28,7 @@ namespace Multiplayer
 
         public override void OnStartServer()
         {
-            _timeService.OnTick += AnnounceResult;
-            _timeService.OnChangeState += AnnounceCall;
-        }
-
-        [Server]
-        private void AnnounceCall(bool value)
-        {
-            if (value)
-            {
-                _timeService.OnTick += AnnounceResult;
-            }
-            else
-            {
-                _timeService.OnTick -= AnnounceResult;
-                _loserNames.Clear();
-                _loserCount = 0;
-            }
+            _timeService.OnRealtimeTick += AnnounceResult;
         }
 
         [Server]
@@ -59,7 +42,6 @@ namespace Multiplayer
         [ClientRpc]
         private void RpcAdd(uint id)
         {
-            Debug.Log(id);
             if (_playerId == default)
             {
                 _playerId = id;
@@ -71,14 +53,15 @@ namespace Multiplayer
         {
             _loserNames.Add(id);
             _loserCount += 1;
+            _timeService.ChangeState(false);
         }
 
         private void AnnounceResult()
         {
             if (_loserCount == 0) return;
-            _timeService.OnTick -= AnnounceResult; 
             RpcAnnounce(_loserNames, _netManager.PlayerCount);
-            _timeService.ChangeState(false);
+            _loserNames.Clear();
+            _loserCount = 0;
         }
 
         [ClientRpc]

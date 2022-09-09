@@ -8,7 +8,7 @@ using TMPro;
 
 namespace Multiplayer
 {
-    public class CanvasHUD : MonoBehaviour
+    public class MonoCanvasHUD : MonoBehaviour
     {
         [SerializeField] private Button buttonCreate;
         [SerializeField] private Button buttonHost;

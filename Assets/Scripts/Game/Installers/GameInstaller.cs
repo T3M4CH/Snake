@@ -13,20 +13,20 @@ namespace Game.Installers
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private SetupSelector selector;
-        [SerializeField] private SpawnSettings spawnSettings;
+        [SerializeField] private SerializableSpawnSettings serializableSpawnSettings;
         [SerializeField] private GameObject tailPrefab;
         [SerializeField] private NetManager networkManager;
-        [SerializeField] private CanvasHUD canvasHUD;
-        [SerializeField] private LosePanel losePanel;
-        [SerializeField] private Referee referee;
-        [SerializeField] private SwipeHandler swipeHandler;
+        [SerializeField] private MonoCanvasHUD monoCanvasHUD;
+        [SerializeField] private NetLosePanel netLosePanel;
+        [SerializeField] private NetReferee netReferee;
+        [SerializeField] private MonoSwipeHandler monoSwipeHandler;
         [SerializeField] private TickController.TimeService timeService;
 
         public override void InstallBindings()
         {
             Container
-                .Bind<CanvasHUD>()
-                .FromInstance(canvasHUD)
+                .Bind<MonoCanvasHUD>()
+                .FromInstance(monoCanvasHUD)
                 .AsSingle();
             
             Container
@@ -40,23 +40,23 @@ namespace Game.Installers
                 .AsSingle();
             
             Container
-                .BindInterfacesTo<SpawnSettings>()
-                .FromInstance(spawnSettings)
+                .BindInterfacesTo<SerializableSpawnSettings>()
+                .FromInstance(serializableSpawnSettings)
                 .AsSingle();
             
             Container
-                .BindInterfacesTo<SwipeHandler>()
-                .FromInstance(swipeHandler)
+                .BindInterfacesTo<MonoSwipeHandler>()
+                .FromInstance(monoSwipeHandler)
                 .AsSingle();
 
             Container
-                .BindInterfacesTo<Referee>()
-                .FromInstance(referee)
+                .BindInterfacesTo<NetReferee>()
+                .FromInstance(netReferee)
                 .AsSingle();
             
             Container
-                .BindInterfacesTo<LosePanel>()
-                .FromInstance(losePanel)
+                .BindInterfacesTo<NetLosePanel>()
+                .FromInstance(netLosePanel)
                 .AsSingle();
 
             Container

@@ -11,7 +11,7 @@ using Zenject;
 
 namespace Multiplayer.UI
 {
-    public class LosePanel : NetworkBehaviour, ILosePanel
+    public class NetLosePanel : NetworkBehaviour, ILosePanel
     {
         [SerializeField] private Image panel;
         [SerializeField] private Button exitButton;
@@ -20,15 +20,13 @@ namespace Multiplayer.UI
         [SerializeField] private TextMeshProUGUI restartText;
 
         private int _playersConfirm;
-        private ITimeService _timeService;
         private INetManager _netManager;
 
         public event Action Restart = () => { };
 
         [Inject]
-        public void Construct(ITimeService timeService, INetManager netManager)
+        public void Construct(INetManager netManager)
         {
-            _timeService = timeService;
             _netManager = netManager;
         }
 
@@ -51,12 +49,10 @@ namespace Multiplayer.UI
                 {
                     NetworkManager.singleton.StopHost();
                 }
-                // stop client if client-only
                 else if (NetworkClient.isConnected)
                 {
                     NetworkManager.singleton.StopClient();
                 }
-                // stop server if server-only
                 else if (NetworkServer.active)
                 {
                     NetworkManager.singleton.StopServer();

@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using Zenject;
 
-public class SessionService : NetworkBehaviour
+public class NetSessionService : NetworkBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private NetManager netManager;
@@ -54,6 +54,7 @@ public class SessionService : NetworkBehaviour
         string value;
         switch (netManager.PlayerCount)
         {
+            //TODO: CHANGE TO 1 FOR MIN 2 PLAYERS
             case > 1 when NetworkServer.connections.Count != netManager.PlayerCount:
                 value = "10";
                 _isTicking = true;
@@ -61,7 +62,7 @@ public class SessionService : NetworkBehaviour
                 text.text = value;
                 _timeService.ChangeState(false);
                 break;
-            case > 1 when NetworkServer.connections.Count == netManager.PlayerCount:
+            case > 0 when NetworkServer.connections.Count == netManager.PlayerCount:
                 value = Tick;
                 text.text = value;
                 _isTicking = false;

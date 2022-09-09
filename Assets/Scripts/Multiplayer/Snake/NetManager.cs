@@ -12,11 +12,11 @@ namespace Multiplayer.Snake
     {
         public event Action OnClientInteract = () => { };
 
-        [SerializeField] private SessionService sessionService;
+        [SerializeField] private NetSessionService netSessionService;
         private ISpawnSettings _spawnSettings;
         private ITimeService _timeService;
         private SetupSelector _selector;
-        private CanvasHUD _canvasHUD;
+        private MonoCanvasHUD _monoCanvasHUD;
 
         [Inject]
         private void Construct
@@ -24,10 +24,10 @@ namespace Multiplayer.Snake
             ISpawnSettings spawnSettings,
             SetupSelector selector,
             ITimeService timeService,
-            CanvasHUD canvasHUD
+            MonoCanvasHUD monoCanvasHUD
         )
         {
-            _canvasHUD = canvasHUD;
+            _monoCanvasHUD = monoCanvasHUD;
             _spawnSettings = spawnSettings;
             _timeService = timeService;
             _selector = selector;
@@ -54,7 +54,7 @@ namespace Multiplayer.Snake
         {
             GameStateMessage message = new GameStateMessage()
             {
-                Active = sessionService.IsStarted
+                Active = netSessionService.IsStarted
             };
             NetworkServer.SendToAll(message);
         }
@@ -63,8 +63,8 @@ namespace Multiplayer.Snake
         {
             base.OnClientConnect();
 
-            _canvasHUD.gameObject.SetActive(false);
-            _canvasHUD.AddressText.text = singleton.networkAddress;
+            _monoCanvasHUD.gameObject.SetActive(false);
+            _monoCanvasHUD.AddressText.text = singleton.networkAddress;
             NetworkClient.RegisterHandler<GameStateMessage>(ChangeReadyButton);
             _selector.SetActive(true);
             _selector.ReadyButton.onClick.AddListener(() =>
@@ -82,7 +82,7 @@ namespace Multiplayer.Snake
 
         public override void OnClientDisconnect()
         {
-            _canvasHUD.gameObject.SetActive(true);
+            _monoCanvasHUD.gameObject.SetActive(true);
         }
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)

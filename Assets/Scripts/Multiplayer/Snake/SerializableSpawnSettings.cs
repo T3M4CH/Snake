@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Multiplayer.Snake
 {
     [Serializable]
-    public class SpawnSettings : ISpawnSettings
+    public class SerializableSpawnSettings : ISpawnSettings
     {
         [field: SerializeField]
         public Vector2[] SpawnPositions

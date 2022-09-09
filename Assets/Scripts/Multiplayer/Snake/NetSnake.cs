@@ -57,7 +57,7 @@ namespace Multiplayer.Snake
             {
                 if (!isServer) return;
                 _refereeService.Print(_networkIdentity.netId);
-                tailMovement.StopMovement();
+                tailMovement.RpcStopMovement();
             }
         }
 

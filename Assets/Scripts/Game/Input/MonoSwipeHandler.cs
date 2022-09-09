@@ -1,12 +1,11 @@
 using System;
 using Game.Input.Interfaces;
-using Mirror;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Game.Input
 {
-    public class SwipeHandler : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
+    public class MonoSwipeHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, ISwipeHandler
     {
         [Range(0f, 1f)] public float swipeThreshold = 0.5f;
 
