@@ -1,8 +1,8 @@
 using System;
-using Game.Apple.Interfaces;
 using Game.Snake;
 using Game.TickController.Interfaces;
 using Mirror;
+using Multiplayer.Apple.Interfaces;
 using Multiplayer.UI.Interfaces;
 using UnityEngine;
 using Zenject;
@@ -11,7 +11,7 @@ namespace Multiplayer.Snake
 {
     public class NetSnake : NetworkBehaviour
     {
-        [SerializeField] private TailMovement tailMovement;
+        [SerializeField] private NetTailMovement netTailMovement;
 
         [SyncVar(hook = nameof(SetColor))] private Color _color;
 
@@ -47,23 +47,23 @@ namespace Multiplayer.Snake
         [ServerCallback]
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out IPickable pickable))
+            if (col.TryGetComponent(out IConsumable pickable))
             {
                 pickable.Pick();
-                tailMovement.Add(gameObject);
+                netTailMovement.Add(gameObject);
             }
 
             if (col.CompareTag("Snake"))
             {
                 if (!isServer) return;
                 _refereeService.Print(_networkIdentity.netId);
-                tailMovement.RpcStopMovement();
+                netTailMovement.RpcStopMovement();
             }
         }
 
         private void Restart()
         {
-            tailMovement.RemoveTail();
+            netTailMovement.RemoveTail();
             transform.position = _spawnPosition;
         }
 

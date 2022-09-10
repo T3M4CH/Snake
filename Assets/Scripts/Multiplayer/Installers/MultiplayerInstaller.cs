@@ -1,16 +1,15 @@
 using Game.Input;
 using Game.Scene;
-using Game.Snake;
-using Mirror;
-using Multiplayer;
 using Multiplayer.Snake;
+using Multiplayer.TimeService;
 using Multiplayer.UI;
+using Singleplayer.Scene;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Installers
+namespace Multiplayer.Installers
 {
-    public class GameInstaller : MonoInstaller
+    public class MultiplayerInstaller : MonoInstaller
     {
         [SerializeField] private SetupSelector selector;
         [SerializeField] private SerializableSpawnSettings serializableSpawnSettings;
@@ -20,7 +19,7 @@ namespace Game.Installers
         [SerializeField] private NetLosePanel netLosePanel;
         [SerializeField] private NetReferee netReferee;
         [SerializeField] private MonoSwipeHandler monoSwipeHandler;
-        [SerializeField] private TickController.TimeService timeService;
+        [SerializeField] private NetTimeService netTimeService;
 
         public override void InstallBindings()
         {
@@ -64,17 +63,9 @@ namespace Game.Installers
                 .AsSingle();
 
             Container
-                .Bind<SoundSystem>()
-                .AsSingle()
-                .NonLazy();
-
-            Container
-                .BindInterfacesTo<TickController.TimeService>()
-                .FromInstance(timeService)
+                .BindInterfacesTo<NetTimeService>()
+                .FromInstance(netTimeService)
                 .AsSingle();
-
-            Container
-                .DeclareSignalWithInterfaces<PlayerDiedSignal>();
         }
     }
 }

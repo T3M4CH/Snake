@@ -1,12 +1,10 @@
-using System;
 using Game.Input.Interfaces;
-using Mirror;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Snake
+namespace Singleplayer.Snake
 {
-    public class SnakeMovement : NetworkBehaviour
+    public class SnakeMovement : MonoBehaviour
     {
         [Inject]
         public void Construct(ISwipeHandler swipeHandler)
@@ -14,7 +12,7 @@ namespace Game.Snake
             _swipeHandler = swipeHandler;
         }
 
-        [SyncVar] private Vector2Int _direction;
+        private Vector2Int _direction;
 
         private ISwipeHandler _swipeHandler;
 
@@ -25,7 +23,6 @@ namespace Game.Snake
             return new Vector3Int(position.x + _direction.x, position.y + _direction.y);
         }
 
-        [Command]
         private void CmdChangeDirection(Vector2Int direction)
         {
             Debug.Log("Change");
@@ -35,7 +32,6 @@ namespace Game.Snake
 
         private void Start()
         {
-            if (!isLocalPlayer) return;
             _swipeHandler.OnSwipe += CmdChangeDirection;
             _direction = Vector2Int.up;
         }

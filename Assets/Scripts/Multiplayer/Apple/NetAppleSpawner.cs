@@ -1,11 +1,12 @@
 using UnityEngine;
 using Mirror;
+using Multiplayer.Apple;
 
 namespace Game.Apple
 {
-    public class AppleSpawner : NetworkBehaviour
+    public class NetAppleSpawner : NetworkBehaviour
     {
-        [SerializeField] private MonoApple applePrefab;
+        [SerializeField] private NetApple applePrefab;
         
         public override void OnStartServer()
         {
@@ -16,7 +17,7 @@ namespace Game.Apple
         }
 
         [Server]
-        private void ChangePosition(MonoApple apple)
+        private void ChangePosition(NetApple apple)
         {
             var position = RandomPosition;
             apple.transform.position = position;
@@ -24,7 +25,7 @@ namespace Game.Apple
         }
 
         [ClientRpc]
-        private void RpcChangePosition(MonoApple apple, Vector3 position)
+        private void RpcChangePosition(NetApple apple, Vector3 position)
         {
             apple.transform.position = position;
         }

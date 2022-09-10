@@ -3,9 +3,9 @@ using Game.TickController.Interfaces;
 using Mirror;
 using UnityEngine;
 
-namespace Game.TickController
+namespace Multiplayer.TimeService
 {
-    public class TimeService : NetworkBehaviour, ITimeService
+    public class NetTimeService : NetworkBehaviour, ITimeService
     {
         public event Action OnTick = () => { };
         public event Action OnRealtimeTick = () => { };

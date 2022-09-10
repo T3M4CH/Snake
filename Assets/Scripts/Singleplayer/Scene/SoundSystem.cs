@@ -2,7 +2,7 @@ using Game.Scene.Interfaces;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Scene
+namespace Singleplayer.Scene
 {
     public class SoundSystem
     {

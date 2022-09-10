@@ -1,7 +1,5 @@
-using System;
-using Game.Apple.Interfaces;
+using Multiplayer.Apple.Interfaces;
 using Game.Scene;
-using Mirror;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +7,6 @@ namespace Game.Snake
 {
     public class MonoSnake : MonoBehaviour
     {
-        private TailMovement _tailMovement;
         private SignalBus _signalBus;
 
         // [Inject]
@@ -21,10 +18,9 @@ namespace Game.Snake
         //     _signalBus = signalBus;
         // }
 
-        [ServerCallback]
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out IPickable pickable))
+            if (col.TryGetComponent(out IConsumable pickable))
             {
                 pickable.Pick();
                 //_tailMovement.Add(this);

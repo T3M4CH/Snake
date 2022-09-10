@@ -1,7 +1,6 @@
-using System;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine;
 
 namespace Menu
 {
@@ -13,6 +12,7 @@ namespace Menu
 
         private void Start()
         {
+            singlePlayer.onClick.AddListener(() => SceneManager.LoadScene(1));
             multiPlayer.onClick.AddListener(() => SceneManager.LoadScene(2));
         }
     }

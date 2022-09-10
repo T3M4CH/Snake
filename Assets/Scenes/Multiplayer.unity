@@ -1240,7 +1240,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 8740417607154218586, guid: 5ddfb4de7cfb35a4ba072dcb31fa5aec, type: 3}
   - {fileID: 3823016421334716483, guid: f747a9038b2b2c4498ea2a29657cbac3, type: 3}
-  netSessionService: {fileID: 0}
+  netSessionService: {fileID: 700216580}
 --- !u!1 &481024742
 GameObject:
   m_ObjectHideFlags: 0
@@ -3826,7 +3826,7 @@ MonoBehaviour:
   netLosePanel: {fileID: 1941311926}
   netReferee: {fileID: 1941311924}
   monoSwipeHandler: {fileID: 1145914030}
-  timeService: {fileID: 844997278}
+  netTimeService: {fileID: 844997278}
 --- !u!114 &1102270761
 MonoBehaviour:
   m_ObjectHideFlags: 0

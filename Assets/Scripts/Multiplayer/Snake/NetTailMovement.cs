@@ -6,9 +6,9 @@ using Mirror;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Snake
+namespace Multiplayer.Snake
 {
-    public class TailMovement : NetworkBehaviour
+    public class NetTailMovement : NetworkBehaviour
     {
         [Inject]
         public void Construct

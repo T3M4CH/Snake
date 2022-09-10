@@ -39,7 +39,7 @@ namespace Multiplayer.Snake
 
             NetworkServer.RegisterHandler<CreateSnakeMessage>(OnCreateSnake);
 
-            _timeService.OnChangeState += (value) => SendGameState();
+            _timeService.OnChangeState += value => SendGameState();
         }
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
