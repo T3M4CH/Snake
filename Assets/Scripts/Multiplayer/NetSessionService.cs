@@ -54,15 +54,14 @@ public class NetSessionService : NetworkBehaviour
         string value;
         switch (netManager.PlayerCount)
         {
-            //TODO: CHANGE TO 1 FOR MIN 2 PLAYERS
-            case > 1 when NetworkServer.connections.Count != netManager.PlayerCount:
+            case > 2 when NetworkServer.connections.Count != netManager.PlayerCount:
                 value = "10";
                 _isTicking = true;
                 _secondsLeft = 10;
                 text.text = value;
                 _timeService.ChangeState(false);
                 break;
-            case > 0 when NetworkServer.connections.Count == netManager.PlayerCount:
+            case > 1 when NetworkServer.connections.Count == netManager.PlayerCount:
                 value = Tick;
                 text.text = value;
                 _isTicking = false;

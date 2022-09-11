@@ -1,5 +1,3 @@
-using System;
-using Game.Snake;
 using Game.TickController.Interfaces;
 using Mirror;
 using Multiplayer.Apple.Interfaces;
@@ -71,14 +69,7 @@ namespace Multiplayer.Snake
         {
             _networkIdentity = GetComponent<NetworkIdentity>();
             _refereeService.Add(_networkIdentity);
-        }
-
-        private void Start()
-        {
-            if (isLocalPlayer)
-            {
-                _losePanel.Restart += Restart;
-            }
+            _losePanel.Restart += Restart;
         }
     }
 }

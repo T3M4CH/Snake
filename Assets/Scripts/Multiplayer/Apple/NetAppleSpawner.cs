@@ -30,6 +30,7 @@ namespace Game.Apple
             apple.transform.position = position;
         }
         
-        private static Vector3 RandomPosition => new(Random.Range(-8, 8), Random.Range(-4, 4), 0);
+        private static Vector3 RandomPosition => new(Random.Range(-4, 4), Random.Range(-4, 4), 0);
+            //new(Random.Range(-8, 8), Random.Range(-4, 4), 0);
     }
 }

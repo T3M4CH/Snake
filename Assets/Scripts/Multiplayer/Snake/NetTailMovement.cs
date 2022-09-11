@@ -31,9 +31,13 @@ namespace Multiplayer.Snake
         private NetworkConnection _client;
         private readonly List<Transform> _tail = new();
 
+        [Server]
         public void RemoveTail()
         {
-            CmdDestroyTail(_tail);
+            for (int i = 1; i < _tail.Count; i++)
+            {
+                NetworkServer.Destroy(_tail[i].gameObject);
+            }
             _tail.RemoveRange(1, _tail.Count - 1);
         }
 
@@ -95,15 +99,6 @@ namespace Multiplayer.Snake
             _direction = direction;
         }
 
-        [Command]
-        private void CmdDestroyTail(List<Transform> tailTransforms)
-        {
-            for (int i = 1; i < tailTransforms.Count; i++)
-            {
-                NetworkServer.Destroy(tailTransforms[i].gameObject);
-            }
-        }
-
         private void ChangeMoveAccess(bool value)
         {
             if (value)
@@ -134,8 +129,10 @@ namespace Multiplayer.Snake
 
         private void ValidatePosition(ref Vector3 position)
         {
-            if (position.x is > 8 or < -8) position.x *= -1;
+            if (position.x is > 5 or < -5) position.x *= -1;
             if (position.y is > 4 or < -4) position.y *= -1;
+            //if (position.x is > 8 or < -8) position.x *= -1;
+            //if (position.y is > 4 or < -4) position.y *= -1;
         }
     }
 }
