@@ -16,8 +16,8 @@ namespace Multiplayer.Snake
         [SyncVar(hook = nameof(SpawnPosition))]
         private Vector2 _spawnPosition;
 
-        private NetManager _netManager;
         private int _losersCount;
+        private NetManager _netManager;
         private ILosePanel _losePanel;
         private ITimeService _timeService;
         private IRefereeService _refereeService;
@@ -45,22 +45,26 @@ namespace Multiplayer.Snake
         [ServerCallback]
         private void OnTriggerEnter2D(Collider2D col)
         {
-            if (col.TryGetComponent(out IConsumable pickable))
-            {
-                pickable.Pick();
-                netTailMovement.Add(gameObject);
-            }
-
             if (col.CompareTag("Snake"))
             {
                 if (!isServer) return;
+                _losersCount += 1;
                 _refereeService.Print(_networkIdentity.netId);
                 netTailMovement.RpcStopMovement();
+            }
+            
+            if (col.TryGetComponent(out IConsumable pickable))
+            {
+                if (!isServer) return;
+                if (_losersCount > 0) return;
+                pickable.Pick();
+                netTailMovement.Add(gameObject);
             }
         }
 
         private void Restart()
         {
+            _losersCount = 0;
             netTailMovement.RemoveTail();
             transform.position = _spawnPosition;
         }

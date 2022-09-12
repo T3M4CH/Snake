@@ -21,17 +21,6 @@ namespace Multiplayer.TimeService
         {
             _isActive = isStart;
             OnChangeState.Invoke(isStart);
-
-            RpcChangeState(isStart);
-        }
-
-        [ClientRpc]
-        private void RpcChangeState(bool value)
-        {
-            if (isClientOnly)
-            {
-                OnChangeState.Invoke(value);
-            }
         }
 
         private void Update()

@@ -23,17 +23,22 @@ namespace Game.Input
         {
             var dir = (data.position - data.pressPosition).normalized;
 
-            if (dir.x > swipeThreshold)
-                OnSwipe.Invoke(Vector2Int.right);
+            if (dir.x > dir.y)
+            {
+                if (dir.x > swipeThreshold)
+                    OnSwipe.Invoke(Vector2Int.right);
 
-            if (dir.x < -swipeThreshold)
-                OnSwipe.Invoke(Vector2Int.left);
+                if (dir.x < -swipeThreshold)
+                    OnSwipe.Invoke(Vector2Int.left);
+            }
+            else
+            {
+                if (dir.y > swipeThreshold)
+                    OnSwipe.Invoke(Vector2Int.up);
 
-            if (dir.y > swipeThreshold)
-                OnSwipe.Invoke(Vector2Int.up);
-
-            if (dir.y < -swipeThreshold)
-                OnSwipe.Invoke(Vector2Int.down);
+                if (dir.y < -swipeThreshold)
+                    OnSwipe.Invoke(Vector2Int.down);
+            }
         }
     }
 }
