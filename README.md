@@ -1,4 +1,4 @@
 # Snake
 
-Remake of one of my first games (3 years ago)
+Classical snake game
 with working multiplayer made on Mirror
